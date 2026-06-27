@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Version>1.0.0.0</Version>
+    <Authors>João Cardoso</Authors>
+    <Company>Bapa Dreams</Company>
+    <Description>Tiled Parser Utilities</Description>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <None Update="appconfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
