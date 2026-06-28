@@ -29,7 +29,13 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Pack
-      run: dotnet pack --configuration Release --no-build --output ./artifacts
+      run: |
+        VERSION=${GITHUB_REF_NAME#v}
+        dotnet pack \
+            --configuration Release \
+            --no-build \
+            -p:PackageVersion=$VERSION \
+            --output ./artifacts
 
     - name: Publish to GitHub Packages
       run: |
