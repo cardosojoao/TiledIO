@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 namespace TiledIO.Entities
 {
@@ -32,6 +33,16 @@ namespace TiledIO.Entities
         public bool Empty()
         {
             return Data.Count(c => c != 0) == 0;
+        }
+
+        public uint GetTileId(int x, int y)
+        {
+            if (x < 0 || x >= Width || y < 0 || y >= Height)
+            {
+                throw new ArgumentOutOfRangeException("Coordinates are out of bounds.");
+            }
+            int index = y * Width + x;
+            return Data[index];
         }
     }
 }
