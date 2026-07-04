@@ -21,6 +21,8 @@ namespace TiledIO.Mapper
             string worldName = sceneRaw.Properties.GetProperty("WorldName");
             string scenedName = sceneRaw.Properties.GetProperty("SceneName");
             scene.FileName = worldName + "_" + scenedName;
+            scene.TileWidth = sceneRaw.Tilewidth;
+            scene.TileHeight = sceneRaw.Tileheight;
             scene.Layer2Palette = sceneRaw.Properties.GetProperty("PaletteLayer2");
             scene.Properties = PropertyMapper.Map(sceneRaw.Properties);
             string inputPath = Path.GetDirectoryName(input);
@@ -33,17 +35,25 @@ namespace TiledIO.Mapper
         {
             Dictionary<string, List<Model.TileSet>> resolved = new();
             Dictionary<string, Model.tileset> tilesSetData = new();
-
             int order = 0;       // order of load 
 
-            tileSetsRaw.ForEach(t => t.Source = Path.GetFullPath(Path.Combine(inputPath, t.Source)));
-            tileSetsRaw = tileSetsRaw.OrderBy(t => t.Source).ToList();
+            List<Model.TileSet> tileSetsRawDup = tileSetsRaw
+                .Select(x => new Model.TileSet
+                {
+                    Firstgid = x.Firstgid,
+                    Source = x.Source,
+                })
+                .ToList();
 
-            List<Model.TileSet> tileSets = tileSetsRaw.Where(s => s.Source.Contains("tilesheets", StringComparison.CurrentCultureIgnoreCase)).ToList();
 
-            List<Model.TileSet> spriteSets = tileSetsRaw.Where(s => s.Source.Contains("sprites", StringComparison.CurrentCultureIgnoreCase)).ToList();
+            tileSetsRawDup.ForEach(t => t.Source = Path.GetFullPath(Path.Combine(inputPath, t.Source)));
+            tileSetsRawDup = tileSetsRawDup.OrderBy(t => t.Source).ToList();
 
-            foreach (TileSet tileSet in tileSetsRaw)
+            List<Model.TileSet> tileSets = tileSetsRawDup.Where(s => s.Source.Contains("tilesheets", StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+            List<Model.TileSet> spriteSets = tileSetsRawDup.Where(s => s.Source.Contains("sprites", StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+            foreach (TileSet tileSet in tileSetsRawDup)
             {
                 tileSet.Order = order;      // judt to keep in mind the physical order of tilesheet that is align with gid's
                 string file = Path.GetFullPath(Path.Combine(inputPath, tileSet.Source));

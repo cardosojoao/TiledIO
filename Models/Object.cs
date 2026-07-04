@@ -14,9 +14,18 @@ namespace TiledIO.Models
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
+
+        [JsonPropertyName("ellipse")]
+        public bool Ellipse { get; set; }
+
+        [JsonPropertyName("point")]
+        public bool Point { get; set; }
+
         [JsonPropertyName("properties")]
-        public List<Property> Properties { get;
-            set; }
+        public List<Property> Properties { get; set; }
+
+        [JsonPropertyName("opacity")]
+        public double Opacity { get; set; } = 1.0;
 
         [JsonPropertyName("rotation")]
         public int Rotation { get; set; }

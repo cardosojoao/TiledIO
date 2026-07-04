@@ -6,6 +6,12 @@ namespace TiledIO.Models
 
     public class Scene
     {
+        [JsonPropertyName("class")]
+        public string Class { get; set; }
+
+        [JsonPropertyName("backgroundcolor")]
+        public string Backgroundcolor { get; set; }
+
         [JsonPropertyName("compressionlevel")]
         public int Compressionlevel { get; set; }
 

@@ -21,6 +21,11 @@ namespace TiledIO.Entities
                 return _instance;
             }
         }
+
+        public int TileWidth { get; set; }
+
+        public int TileHeight { get; set; }
+
         public string RootFolder { get; set; }
         public string FileName { get; set; }
         public int SpritesPalette { get; set; }
