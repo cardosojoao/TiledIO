@@ -55,9 +55,9 @@ namespace TiledIO
             return GetLayerRecursiveByName(scene.Layers, layerName);
         }
 
-        public static Entities.Layer GetLayerByProperty(Entities.Scene scene, string propertyName, object value)
+        public static Entities.Layer GetLayerByProperty(Entities.Scene scene, string propertyName)
         {
-            return GetLayerRecursiveByProperty(scene.Layers, propertyName, value);
+            return GetLayerRecursiveByProperty(scene.Layers, propertyName);
         }
 
 
@@ -109,28 +109,28 @@ namespace TiledIO
 
 
 
-        private static Entities.Layer GetLayerRecursiveByProperty(List<Entities.Layer> layers, string propertyName, object value)
+        private static Entities.Layer GetLayerRecursiveByProperty(List<Entities.Layer> layers, string propertyName)
         {
             if (layers == null || layers.Count == 0)
                 return null;
-
             // Search recursively in child layers
             foreach (var currentLayer in layers)
             {
                 if (currentLayer.Properties != null)
                 {
-                    string propValue = currentLayer.Properties.GetProperty(propertyName);
-                    if (propValue == value.ToString())
+                    if( currentLayer.Properties.ExistProperty(propertyName))
                     {
                         return currentLayer;
                     }   
                 }
                 if (currentLayer.Layers != null && currentLayer.Layers.Count > 0)
                 {
-
-                    var foundLayer = GetLayerRecursiveByProperty(currentLayer.Layers, propertyName, value);
+                    var foundLayer = GetLayerRecursiveByProperty(currentLayer.Layers, propertyName);
                     if (foundLayer != null)
+                    {
                         return foundLayer;
+                    }
+                       
                 }
             }
             return null;
