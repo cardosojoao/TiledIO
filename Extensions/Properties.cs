@@ -68,7 +68,8 @@ namespace TiledIO.Extensions
                 string subProp = name.Substring(proptNameIndex + 1);
                 string propName = name.Substring(0, proptNameIndex);
                 Entities.Property prop = properties.FirstOrDefault(p => p.Name.Equals(propName, StringComparison.InvariantCultureIgnoreCase));
-                if (prop.Propertytype == "class")
+                //if (prop.Propertytype == "class")
+                if (prop.Type == "class")
                 {
                     Dictionary<string, object> dict = (Dictionary<string, object>)prop.GetValue();
                     if (dict.ContainsKey(subProp))
@@ -134,7 +135,8 @@ namespace TiledIO.Extensions
                 string subProp = name.Substring(proptNameIndex + 1);
                 string propName = name.Substring(0, proptNameIndex);
                 Entities.Property prop = properties.FirstOrDefault(p => p.Name.Equals(propName, StringComparison.InvariantCultureIgnoreCase));
-                if (prop.Propertytype == "class")
+                //if (prop.Propertytype == "class")
+                if (prop.Type == "class")
                 {
                     Dictionary<string, object> dict = (Dictionary<string, object>)prop.GetValue();
                     if (dict.ContainsKey(subProp))
