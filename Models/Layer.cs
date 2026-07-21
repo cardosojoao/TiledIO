@@ -5,6 +5,18 @@ namespace TiledIO.Models
 {
     public partial class Layer
     {
+        [JsonPropertyName("class")]
+        public string Class { get; set; }
+
+        [JsonPropertyName("color")]
+        public string Color { get; set; }
+
+        [JsonPropertyName("offsetx")]
+        public int OffsetX { get; set; }
+
+        [JsonPropertyName("offsety")]
+        public int OffsetY { get; set; }
+
         [JsonPropertyName("layers")]
         public List<Layer> Layers { get; set; }
 
