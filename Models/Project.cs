@@ -21,7 +21,7 @@ namespace TiledIO.Models
         [JsonPropertyName("properties")]
         public List<Property> Properties { get; set; }
         [JsonPropertyName("propertyTypes")]
-        public List<PropertyType> PropertyTypes { get; set; }
+        public List<PropertyTypeDefinition> PropertyTypes { get; set; }
     }
 
 
