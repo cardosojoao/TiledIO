@@ -22,8 +22,16 @@ namespace TiledIO.Mapper
                 project.Includes.Append<string, Table>(ResolveTables(projectRaw.Properties.GetProperty("Includes"), appRoot));
             }
 
+            project.PropertyTypes = new List<Entities.PropertyTypeDefinition>();
+            project.PropertyTypes.AddRange(PropertyTypeMapper.Map(projectRaw.PropertyTypes));
 
-            project.PropertyTypes = projectRaw.PropertyTypes.FindAll(f=>f.Type == "enum").ConvertAll<Entities.PropertyType>(x=> new Entities.PropertyType() { Id =x.Id, Name = x.Name, StorageType = x.StorageType, Type = x.Type, Values = x.Values, ValuesAsFlags = x.ValuesAsFlags});
+            //project.PropertyTypes = projectRaw.PropertyTypes.FindAll(f=>f.Type == "enum").ConvertAll<Entities.EnumPropertyType>(x=> new Entities.EnumPropertyType() { Id =x.Id, Name = x.Name, StorageType = x.StorageType, Type = x.Type, Values = x.Values, ValuesAsFlags = x.ValuesAsFlags});
+
+
+            //project.PropertyTypes.Add( = projectRaw.PropertyTypes.FindAll(f => f.Type == "class").ConvertAll<Entities.ClassPropertyType>(x => new Entities.ClassPropertyType() { Id = x.Id, Name = x.Name, StorageType = x.StorageType, Type = x.Type, Values = x.Values, ValuesAsFlags = x.ValuesAsFlags }));
+
+
+
         }
 
         /// <summary>

@@ -25,6 +25,6 @@ namespace TiledIO.Entities
         public List<Property> Properties { get; set; } = new();
         public Dictionary<string, Table> Tables { get; set; } = new();
         public Dictionary<string, Table> Includes { get; set; } = new();
-        public List<PropertyType> PropertyTypes { get; set; } = new();
+        public List<PropertyTypeDefinition> PropertyTypes { get; set; } = new();
     }
 }

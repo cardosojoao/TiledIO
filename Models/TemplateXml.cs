@@ -62,6 +62,8 @@ namespace TiledIO.Models.XML
     [XmlRoot(ElementName = "template")]
     public class Template
     {
+        [XmlElement(ElementName = "tileset")]
+        public TilesetTemplate TileSet { get; set; }
 
         [XmlElement(ElementName = "object")]
         public Object Object { get; set; }

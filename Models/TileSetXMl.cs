@@ -329,6 +329,45 @@ namespace TiledIO.Models
         }
     }
 
+    [System.Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
+    [System.Xml.Serialization.XmlRoot(Namespace = "", IsNullable = false)]
+    public partial class TilesetTemplate
+    {
+
+        private string sourcefield;
+
+        private int firstgidfield;
 
 
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public int firstgid
+        {
+            get
+            {
+                return firstgidfield;
+            }
+            set
+            {
+                firstgidfield = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttribute()]
+        public string source
+        {
+            get
+            {
+                return sourcefield;
+            }
+            set
+            {
+                sourcefield = value;
+            }
+        }
+    }
 }
