@@ -10,5 +10,6 @@ namespace TiledIO.Entities
         public int Width { get; set; }
         public int Height { get; set; }
         public List<Property> Properties { get; set; } = new List<Property>();
+        public string Source { get; set; }
     }
 }

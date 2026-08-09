@@ -9,7 +9,10 @@ namespace TiledIO.Mapper
         public static Entity.Template Map(Model.XML.Template templateRaw)
         {
             Entity.Template template= new Entity.Template();
-
+            if (templateRaw.Object.Gid > 0)
+            {
+                template.Source = templateRaw.TileSet.source;
+            }
             template.Gid = templateRaw.Object.Gid;
             template.Type = templateRaw.Object.Type;
             template.Height = templateRaw.Object.Height;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using TiledIO.Entities;
 using Entity = TiledIO.Entities;
 using Model = TiledIO.Models;
 
@@ -98,6 +99,13 @@ namespace TiledIO.Mapper
                         Entities.Scene.Instance.Templates.Add(obj.Template, template);
                     }
                     template = Entities.Scene.Instance.Templates[obj.Template];
+                    if (template.Gid > 0)
+                    {
+                        string tilesetPath = Path.GetFullPath(Path.Combine(Entities.Scene.Instance.RootFolder, template.Source));
+
+                        Tileset t = Entities.Scene.Instance.Tilesets.Find(x => x.Source.Equals(tilesetPath, System.StringComparison.CurrentCultureIgnoreCase));
+                        obj.Gid = (uint)(t.Firstgid + template.Gid - 1);
+                    }
 
                     obj.Type = template.Type;
 
