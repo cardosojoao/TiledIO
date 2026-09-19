@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include=".github\workflows\publish.md" />
     <None Include=".github\workflows\publish.yml" />
   </ItemGroup>
 
