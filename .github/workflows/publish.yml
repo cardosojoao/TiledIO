@@ -3,15 +3,21 @@ name: Publish NuGet Package
 on:
   push:
     tags:
-      - 'v*' 
-
-permissions:
-  contents: read
-  packages: write
+      - "v*"
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: NuGet package version
+        required: true
+        type: string
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
     - name: Checkout
@@ -28,17 +34,62 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
-    - name: Pack
+    - name: Resolve package version
+      id: package-version
+      shell: bash
+      env:
+        MANUAL_VERSION: ${{ inputs.version }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
       run: |
-        VERSION=${GITHUB_REF_NAME#v}
+        if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+          version="${GITHUB_REF_NAME#v}"
+        elif [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+          version="$MANUAL_VERSION"
+        else
+          version="0.0.0-pr.${PR_NUMBER}.${GITHUB_RUN_NUMBER}"
+        fi
+
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+
+    - name: Pack
+      env:
+        PACKAGE_VERSION: ${{ steps.package-version.outputs.version }}
+      run: |
         dotnet pack \
-            --configuration Release \
-            --no-build \
-            -p:PackageVersion=$VERSION \
-            --output ./artifacts
+          --configuration Release \
+          --no-build \
+          -p:PackageVersion="$PACKAGE_VERSION" \
+          --output ./artifacts
+
+    - name: Upload package
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: ./artifacts/*.nupkg
+
+  publish:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Download package
+      uses: actions/download-artifact@v4
+      with:
+        name: nuget-package
+        path: ./artifacts
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
 
     - name: Publish to GitHub Packages
       run: |
         dotnet nuget push "./artifacts/*.nupkg" \
           --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
-          --api-key ${{ secrets.GITHUB_TOKEN }}
+          --api-key ${{ secrets.GITHUB_TOKEN }} \
+          --skip-duplicate
