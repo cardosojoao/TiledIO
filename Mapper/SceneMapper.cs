@@ -23,12 +23,14 @@ namespace TiledIO.Mapper
             scene.FileName = worldName + "_" + scenedName;
             scene.TileWidth = sceneRaw.Tilewidth;
             scene.TileHeight = sceneRaw.Tileheight;
+            scene.Width = sceneRaw.Width;
+            scene.Height = sceneRaw.Height;
             scene.Layer2Palette = sceneRaw.Properties.GetProperty("PaletteLayer2");
             scene.Properties = PropertyMapper.Map(sceneRaw.Properties);
             string inputPath = Path.GetDirectoryName(input);
             scene.RootFolder = inputPath;
             scene.Tilesets = ResolveTileSets(sceneRaw.Tilesets, inputPath);
-                        return scene;
+            return scene;
         }
 
         private static List<Entity.Tileset> ResolveTileSets(List<Model.TileSet> tileSetsRaw, string inputPath)
@@ -85,7 +87,7 @@ namespace TiledIO.Mapper
                     continue;
                 }
                 tileSet.Lastgid = tileSetData.tilecount + tileSet.Firstgid - 1;
-                tileSet.Tiles =  new List<TilesetTile>( tileSetData.Tiles);
+                tileSet.Tiles = new List<TilesetTile>(tileSetData.Tiles);
                 tileSet.Properties = new List<TilesetTileProperty>(tileSetData.properties);
 
 
@@ -123,7 +125,7 @@ namespace TiledIO.Mapper
                     if (setRaw.Tiles != null)
                     {
                         tileset.Tiles = new List<Entity.TileSetTile>();
-                        
+
                         foreach (TilesetTile tile in setRaw.Tiles)
                         {
                             tileset.Tiles.Add(new Entity.TileSetTile() { ID = tile.id, Properties = PropertyMapper.Map(tile.properties.ToList()) });
