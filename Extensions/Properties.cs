@@ -33,6 +33,11 @@ namespace TiledIO.Extensions
             }
         }
 
+        public static string  GetPropertyExtend(this List<Models.Property> properties, string name)
+        {
+            return name+"." + GetProperty(properties, name);
+        }
+
         public static string GetProperty(this List<Models.Property> properties, string name)
         {
             if (properties == null) throw new ArgumentNullException(nameof(properties));
@@ -57,6 +62,11 @@ namespace TiledIO.Extensions
                 Models.Property prop = properties.FirstOrDefault(p => p.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
                 return prop?.GetValue().ToString() ?? "";
             }
+        }
+
+        public static string  GetPropertyExtend(this List<Entities.Property> properties, string name, string defaultValue = "")
+        {
+            return name+"." + GetProperty(properties, name, defaultValue);
         }
 
         public static string GetProperty(this List<Entities.Property> properties, string name, string defaultValue = "")
