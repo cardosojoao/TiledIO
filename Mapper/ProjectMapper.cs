@@ -19,7 +19,9 @@ namespace TiledIO.Mapper
 
             if (projectRaw.Properties.ExistProperty("Includes"))
             {
+                Breadcrumbs.Push("ResolveTables");
                 project.Includes.Append<string, Table>(ResolveTables(projectRaw.Properties.GetProperty("Includes"), appRoot));
+                Breadcrumbs.Pop();
             }
 
             project.PropertyTypes = new List<Entities.PropertyTypeDefinition>();
@@ -44,10 +46,12 @@ namespace TiledIO.Mapper
             Dictionary<string, Table> tables = new();
             foreach (string table in tablesRaw)
             {
+                Breadcrumbs.Push(table);
                 string[] tableParts = table.Split(':');
                 Table tableSettings = new Table() { Name = tableParts[0], FilePath = tableParts[1] };
                 tables.Add(tableSettings.Name, tableSettings);
                 Console.WriteLine($"Table={tableSettings.Name} Path={tableSettings.FilePath}");
+                Breadcrumbs.Pop();
             }
             return tables;
         }

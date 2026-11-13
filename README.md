@@ -98,6 +98,19 @@ foreach (var map in world.Maps)
 
 World loading returns map references and placement information. It does not load the referenced maps or resolve their filenames into absolute paths.
 
+**Track JSON paths during processing**
+
+Use `Push` to add a string or integer and `Pop` to remove the latest value. `GetStack()` returns a snapshot in push order. Read `CurrentPath` before popping when reporting an error.
+
+```csharp
+JsonBreadcrumbs.Push("layers");
+JsonBreadcrumbs.Push(0);
+var stack = JsonBreadcrumbs.GetStack(); // ["layers", 0]
+var path = JsonBreadcrumbs.CurrentPath; // $.layers[0]
+JsonBreadcrumbs.Pop();                  // ["layers"]
+JsonBreadcrumbs.Pop();                  // []
+```
+
 **Read and write XML tilesets**
 
 ```csharp
