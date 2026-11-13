@@ -14,8 +14,8 @@ namespace TiledIO.Mapper
             foreach (var layerRaw in LayersRaw)
             {
                 if (layerRaw.Visible)
-                { 
-                layers.Add(ParseLayer(layerRaw)); 
+                {
+                    layers.Add(ParseLayer(layerRaw));
                 }
             }
             return layers;
@@ -23,7 +23,7 @@ namespace TiledIO.Mapper
 
         private static Entity.Layer ParseLayer(Model.Layer layerRaw)
         {
-
+            Breadcrumbs.Push(layerRaw.Name);
             Entity.Layer layer = new()
             {
                 Layers = new(),
@@ -41,11 +41,15 @@ namespace TiledIO.Mapper
 
             if (layerRaw.Objects != null)
             {
+                Breadcrumbs.Push("MapObjects");
                 layer.Objects = ParseObjects(layerRaw.Objects);
+                Breadcrumbs.Pop();
             }
             if (layerRaw.Properties != null)
             {
+                Breadcrumbs.Push("MapProperties");
                 layer.Properties = PropertyMapper.Map(layerRaw.Properties);
+                Breadcrumbs.Pop();
             }
 
             if (layerRaw.Layers != null)
@@ -58,7 +62,7 @@ namespace TiledIO.Mapper
                     }
                 }
             }
-
+            Breadcrumbs.Pop();
             return layer;
         }
 
@@ -67,6 +71,7 @@ namespace TiledIO.Mapper
             List<Entity.Object> objects = new();
             foreach (Model.Object objectRaw in objectsRaw)
             {
+                Breadcrumbs.Push("MapObject_" + objectRaw.Name);
                 Entity.Object obj = new()
                 {
                     Gid = objectRaw.Gid,
@@ -81,7 +86,8 @@ namespace TiledIO.Mapper
                     Template = objectRaw.Template
                 };
 
-
+                
+                
                 if (objectRaw.Properties != null)
                 {
                     obj.Properties = PropertyMapper.Map(objectRaw.Properties);
@@ -89,6 +95,8 @@ namespace TiledIO.Mapper
 
                 if (obj.Template != null)
                 {
+                    Breadcrumbs.Push("MapTemplate_" + obj.Template);
+
                     obj.Properties ??= new List<Entities.Property>();
                     Entities.Template template;
                     if (!Entities.Scene.Instance.Templates.ContainsKey(obj.Template))
@@ -102,14 +110,13 @@ namespace TiledIO.Mapper
                     if (template.Gid > 0)
                     {
                         string tilesetPath = Path.GetFullPath(Path.Combine(Entities.Scene.Instance.RootFolder, template.Source));
-
                         Tileset t = Entities.Scene.Instance.Tilesets.Find(x => x.Source.Equals(tilesetPath, System.StringComparison.CurrentCultureIgnoreCase));
                         obj.Gid = (uint)(t.Firstgid + template.Gid - 1);
                     }
 
                     obj.Type = template.Type;
 
-                    if(obj.Width == 0 && template.Width != 0)
+                    if (obj.Width == 0 && template.Width != 0)
                     {
                         obj.Width = template.Width;
                     }
@@ -118,8 +125,7 @@ namespace TiledIO.Mapper
                     {
                         obj.Height = template.Height;
                     }
-
-
+                    Breadcrumbs.Pop();
 
                     foreach (var property in template.Properties)
                     {
@@ -132,6 +138,8 @@ namespace TiledIO.Mapper
 
                 if (objectRaw.Polygon != null)
                 {
+                    Breadcrumbs.Push("MapPolygon_"+objectRaw.Name);
+
                     obj.Polygon = new();
                     if (objectRaw.Properties != null)
                     {
@@ -141,10 +149,12 @@ namespace TiledIO.Mapper
                     {
                         obj.Polygon.Add(new Entity.PolygonPoint() { X = point.x, Y = point.y });
                     }
+                    Breadcrumbs.Pop(); 
                 }
 
                 if (objectRaw.PolyLine != null)
                 {
+                    Breadcrumbs.Push("MapPolyLine_" + objectRaw.Name);
                     obj.Polygon = new();
                     if (objectRaw.Properties != null)
                     {
@@ -154,8 +164,10 @@ namespace TiledIO.Mapper
                     {
                         obj.Polygon.Add(new Entity.PolygonPoint() { X = point.x, Y = point.y });
                     }
+                    Breadcrumbs.Pop();
                 }
                 objects.Add(obj);
+                Breadcrumbs.Pop();
             }
             return objects;
         }

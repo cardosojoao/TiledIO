@@ -30,9 +30,15 @@ namespace TiledIO
 
         public static Entities.Scene LoadScene(string inputFile)
         {
+            Breadcrumbs.Push("LoadScene");
             Models.Scene sceneRaw = LoadSceneRaw(inputFile);
+            Breadcrumbs.Push("MapEntities");
             Entities.Scene scene = SceneMapper.Map(sceneRaw, Entities.Scene.Instance, inputFile);
+            Breadcrumbs.Pop();
+            Breadcrumbs.Push("MapLayers");
             scene.Layers = LayerMapper.Map(sceneRaw.Layers);
+            Breadcrumbs.Pop();
+            Breadcrumbs.Pop();
             return scene;
         }
 
