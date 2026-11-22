@@ -4,8 +4,8 @@ namespace TiledIO.Models
 {
     public partial class MetaData
     {
-        [JsonPropertyName("Enabled")]
-        public bool Enabled { get; set; }
+        [JsonPropertyName("Enable")]
+        public bool Enable { get; set; }
 
         [JsonPropertyName("Name")]
         public string Name { get; set; }

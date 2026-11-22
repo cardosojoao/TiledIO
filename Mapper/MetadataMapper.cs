@@ -10,7 +10,7 @@ namespace TiledIO.Mapper
         {
             Entity.Metadata meta = new();
 
-            meta.Enabled = metadata.Enabled;
+            meta.Enable = metadata.Enable;
             meta.Name = metadata.Name;
             meta.Modified = metadata.Modified;
             meta.Path = metadata.Path;

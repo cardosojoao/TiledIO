@@ -2,7 +2,7 @@
 {
     public class Metadata
     {
-        public bool Enabled { get; set; }
+        public bool Enable { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
         public string Modified { get; set; }
