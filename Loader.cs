@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using TiledIO.Extensions;
 using TiledIO.Mapper;
@@ -61,7 +62,7 @@ namespace TiledIO
             return GetLayerRecursiveByName(scene.Layers, layerName);
         }
 
-        public static Entities.Layer GetLayerByProperty(Entities.Scene scene, string propertyName)
+        public static List<Entities.Layer> GetLayerByProperty(Entities.Scene scene, string propertyName)
         {
             return GetLayerRecursiveByProperty(scene.Layers, propertyName);
         }
@@ -115,8 +116,9 @@ namespace TiledIO
 
 
 
-        private static Entities.Layer GetLayerRecursiveByProperty(List<Entities.Layer> layers, string propertyName)
+        private static List<Entities.Layer> GetLayerRecursiveByProperty(List<Entities.Layer> layers, string propertyName)
         {
+            List<Entities.Layer> found = new List<Entities.Layer>();
             if (layers == null || layers.Count == 0)
                 return null;
             // Search recursively in child layers
@@ -126,20 +128,19 @@ namespace TiledIO
                 {
                     if( currentLayer.Properties.ExistProperty(propertyName))
                     {
-                        return currentLayer;
+                        found.Add(currentLayer);
                     }   
                 }
                 if (currentLayer.Layers != null && currentLayer.Layers.Count > 0)
                 {
-                    var foundLayer = GetLayerRecursiveByProperty(currentLayer.Layers, propertyName);
-                    if (foundLayer != null)
+                    var foundLayers = GetLayerRecursiveByProperty(currentLayer.Layers, propertyName);
+                    if (foundLayers != null)
                     {
-                        return foundLayer;
+                        found.AddRange(foundLayers);
                     }
-                       
                 }
             }
-            return null;
+            return found;
         }
     }
 }
